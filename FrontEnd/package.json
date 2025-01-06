@@ -1,0 +1,25 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "description": "Projet frontend pour P6-Sophiebluel",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ABRSCS/P6-Sophiebluel.git"
+  },
+  "keywords": [
+    "frontend",
+    "P6-Sophiebluel",
+    "react",
+    "javascript"
+  ],
+  "author": "A Brassecasse",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ABRSCS/P6-Sophiebluel/issues"
+  },
+  "homepage": "https://github.com/ABRSCS/P6-Sophiebluel#readme"
+}

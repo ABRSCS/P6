@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Sophie Bluel - Architecte d'intérieur</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap"
+		rel="stylesheet">
+	<script src="https://kit.fontawesome.com/22175fe4ef.js" crossorigin="anonymous"></script>
+	<meta name="description" content="">
+	<link rel="stylesheet" href="./assets/style.css">
+</head>
+
+<body>
+	<div id="editionMode"> </div>
+	<header>
+		<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
+		<nav>
+			<ul>
+				<li>projets</li>
+				<li>contact</li>
+				<li id="loginItem"><a href="http://127.0.0.1:5500/FrontEnd/login.html"
+						style="text-decoration: none;">Login</a></li>
+				<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
+			</ul>
+		</nav>
+	</header>
+	<main>
+		<section id="introduction">
+			<figure>
+				<img src="./assets/images/sophie-bluel.png" alt="">
+			</figure>
+			<article>
+				<h2>Designer d'espace</h2>
+				<p>Je raconte votre histoire, je valorise vos idées. Je vous accompagne de la conception à la livraison
+					finale du chantier.</p>
+				<p>Chaque projet sera étudié en commun, de façon à mettre en valeur les volumes, les matières et les
+					couleurs dans le respect de l’esprit des lieux et le choix adapté des matériaux. Le suivi du
+					chantier sera assuré dans le souci du détail, le respect du planning et du budget.</p>
+				<p>En cas de besoin, une équipe pluridisciplinaire peut-être constituée : architecte DPLG,
+					décorateur(trice)</p>
+			</article>
+		</section>
+		<section id="portfolio">
+			<div class="myproject">
+				<h2>Mes Projets</h2>
+				<div class="editBtn" id="edit">
+					<i class="fa-regular fa-pen-to-square"></i>
+					<p>modifier</p>
+				</div>
+			</div>
+			<div id="categoryFilter">
+
+			</div>
+			<div class="gallery" id="travauxList"></div>
+		</section>
+	</main>
+	<!-- popup-->
+	<div id="editModal" class="modal">
+		<div id="addWorkModal" class="modal">
+			<div class="modalContent">
+				<span class="close">&times;</span>
+				<div id="modalView">
+					<!-- Contenu de la modale sera ajouté ici -->
+					<h2>Ajouter photo</h2>
+					<form id="addWorkForm">
+						<div class="formGroup">
+							<label for="title">Titre</label>
+							<input type="text" id="title" name="title" required>
+						</div>
+						<div class="formGroup">
+							<label for="imageUrl">URL de l'image</label>
+							<input type="text" id="imageUrl" name="imageUrl" required>
+						</div>
+						<div class="formGroup">
+							<label for="categoryId">Catégorie</label>
+							<select id="categoryId" name="categoryId" required>
+								<!-- Options de catégorie seront ajoutées ici -->
+							</select>
+						</div>
+						<button type="submit">Ajouter</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<footer>
+		<nav>
+			<ul>
+				<li>Mentions Légales</li>
+			</ul>
+		</nav>
+	</footer>
+	<script src="./assets/JS/script.js"></script>
+
+
+</body>
+
+</html>
