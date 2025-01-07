@@ -103,25 +103,21 @@ getCategories().then(async categories => {
   await getData();
 });
 
-//ouverture de la modal au click sur le bouton "Modifier"
-const editBtn = document.querySelector(".editBtn");
-const editModal = document.getElementById("editModal");
-const closeBtn = editModal.querySelector(".close")
+//ouverture de la modale au click sur le bouton "Modifier"
+const galleryModal= document.getElementById("galleryModal")
 
-function showPopup() {
-  editModal.style.display = "block";
-}
 
-function hidePopup() {
-  editModal.style.display = "none";
-}
 
-editBtn.addEventListener("click", showPopup);
-closeBtn.addEventListener("click", hidePopup);
+edit.addEventListener("click", () => {
+  galleryModal.style.display = "block";
+});
+
+
+
 
 window.addEventListener("click", (event) => {
-  if (event.target === editModal) {
-    hidePopup();
+  if (event.target === galleryModal) {
+    galleryModal.style.display="none";
   }
 });
 
@@ -129,9 +125,9 @@ window.addEventListener("click", (event) => {
 //modal
 document.querySelectorAll('.close').forEach(closeButton => {
   closeButton.addEventListener('click', function () {
-    let loginModal = document.getElementById('loginModal');
+    let loginItem = document.getElementById('loginItem');
     let addWorkModal = document.getElementById('addWorkModal');
-    loginModal.style.display = 'none';
+    loginItem.style.display = 'none';
     addWorkModal.style.display = 'none';
   });
 });
@@ -152,7 +148,7 @@ function init() {
     editionMode = true;
     let paramodif = document.createElement("p");
     paramodif.textContent = "Mode édition";
-    paramodif.classList.add("modeEdition");
+    paramodif.classList.add("editionMode");
     document.getElementById("editionMode").appendChild(paramodif);
     document.getElementById("categoryFilter").style.display = "none";
     document.querySelector(".editBtn").style.display = "flex";
@@ -171,7 +167,7 @@ function init() {
     editionMode = true;
     let paramodif = document.createElement("p");
     paramodif.textContent = "Mode édition";
-    paramodif.classList.add("modeEdition");
+    paramodif.classList.add("editionMode");
     document.getElementById("categoryFilter").style.display = "none";
     document.querySelector(".editBtn").style.display = "flex";
   }
@@ -182,7 +178,7 @@ function init() {
 const isEditionMode = localStorage.getItem('token') !== null;
 
 if (isEditionMode) {
-  const loginItem = document.querySelector("#loginItem a");
+  const loginModal = document.querySelector("#loginItem a");
   if (loginItem) {
     loginItem.textContent = "Logout";
     loginItem.href = "#"; // Optionnel : changer le lien
@@ -194,8 +190,3 @@ if (isEditionMode) {
     });
   }
 };
-
-
-
-
-
