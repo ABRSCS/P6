@@ -54,7 +54,7 @@ async function getCategories() {
     categories = await response.json();
     return categories;
   } catch (error) {
-    console.error(`Problème avec Fetch : ${errorMessage}`);
+    console.error(`Problème avec Fetch : ${error.message}`);
   }
 }
 
@@ -105,15 +105,23 @@ getCategories().then(async categories => {
 
 //ouverture de la modale au click sur le bouton "Modifier"
 const galleryModal= document.getElementById("galleryModal")
-
+const close = document.querySelector(".close")
 
 
 edit.addEventListener("click", () => {
   galleryModal.style.display = "block";
 });
-
-
-
+async function openGalleryModal() {
+  galleryModal.style.display = "block";
+  const photos = await getData();
+  displayPhotosInModal(photos);
+}
+const editBtn = document.querySelector(".editBtn");
+editBtn.addEventListener("click", openGalleryModal);
+// Fermeture de la modale au click sur la croix et sur l'overlay
+close.addEventListener("click", () => {
+  galleryModal.style.display = "none";
+});
 
 window.addEventListener("click", (event) => {
   if (event.target === galleryModal) {
@@ -121,6 +129,50 @@ window.addEventListener("click", (event) => {
   }
 });
 
+//Afficher les travaux photos dans la modal gallery photos
+
+function displayPhotosInModal(photos) {
+  const photosList = document.getElementById('photosList');
+  photosList.innerHTML = ''; // Effacer les photos existantes
+  photos.forEach(photo => {
+    const photoElement = document.createElement('figure');
+    photoElement.innerHTML = `
+      <img src="${photo.imageUrl}" alt="${photo.title}">
+      <figcaption>${photo.title}</figcaption>
+      <button class="delete-btn" data-id="${photo.id}">🗑️</button>
+    `;
+    photosList.appendChild(photoElement);
+  });
+
+  // Ajouter des écouteurs d'événements pour les boutons de suppression
+  document.querySelectorAll('.delete-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const photoId = e.target.getAttribute('data-id');
+      // Ajoutez ici la logique pour supprimer la photo
+      console.log(`Supprimer la photo avec l'ID : ${photoId}`);
+    });
+  });
+}
+
+// Fonction pour récupérer et afficher les photos
+async function fetchAndDisplayPhotos() {
+  try {
+    const response = await fetch('URL_DE_VOTRE_API/works');
+    const photos = await response.json();
+    
+    photosList.innerHTML = '';
+    photos.forEach(photo => {
+      const photoElement = document.createElement('figure');
+      photoElement.innerHTML = `
+        <img src="${photo.imageUrl}" alt="${photo.title}">
+        <figcaption>${photo.title}</figcaption>
+      `;
+      photosList.appendChild(photoElement);
+    });
+  } catch (error) {
+    console.error('Erreur lors de la récupération des photos:', error);
+  }
+}
 
 //modal
 document.querySelectorAll('.close').forEach(closeButton => {
@@ -143,21 +195,10 @@ window.addEventListener('click', function (event) {
 /****EDITION MODE****/
 let editionMode = false
 
-function init() {
-  if (localStorage.getItem("token")) {
-    editionMode = true;
-    let paramodif = document.createElement("p");
-    paramodif.textContent = "Mode édition";
-    paramodif.classList.add("editionMode");
-    document.getElementById("editionMode").appendChild(paramodif);
-    document.getElementById("categoryFilter").style.display = "none";
-    document.querySelector(".editBtn").style.display = "flex";
-  }
-}
 
-init()
 
-// login logout --- nf°p
+
+// login logout 
 document.addEventListener('DOMContentLoaded', function () {
   init();
   
@@ -168,6 +209,7 @@ function init() {
     let paramodif = document.createElement("p");
     paramodif.textContent = "Mode édition";
     paramodif.classList.add("editionMode");
+    document.getElementById("editionMode").appendChild(paramodif);
     document.getElementById("categoryFilter").style.display = "none";
     document.querySelector(".editBtn").style.display = "flex";
   }

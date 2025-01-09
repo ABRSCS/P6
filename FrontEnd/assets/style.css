@@ -373,11 +373,12 @@ li:hover {
 button[type="submit"] {
 	width: 100%;
 	height: 40px;
-	background-color: #34c759;
+	background-color: #1D6154;
 	/* Couleur verte */
 	color: #ffffff;
+	font-size: 14px;
 	border: none;
-	border-radius: 5px;
+	border-radius: 25px;
 	cursor: pointer;
 }
 
