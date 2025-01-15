@@ -57,46 +57,42 @@
 			<div class="gallery" id="travauxList"></div>
 		</section>
 	</main>
-	<!-- Modale Galerie Photo-->
+
+	<!--Modale-->
 	<div id="galleryModal" class="modal">
-		<div id="gModalContent" class="modalContent">
+
+		<div class="modalContent">
 			<span class="close">&times;</span>
-			<div>
+
+			<!-- Visuel Galerie Photo -->
+			<div id="workDisplay">
 				<h2>Galerie Photo</h2>
+
+				<div id="photosList"></div>
+				<hr>
+				<button id="addPhotoBtn" type="submit">Ajouter une photo</button>
 			</div>
-			<div class="gallery" id="photosList"></div>
-			<button type="submit">Ajouter une photo</button>
-		</div>
-	</div>
-	<!---- Modale Ajout Photo-->
-	<div id="editModal" class="modal">
-		<div id="addWorkModal" class="aWModal">
-			<div class="modalContent">
-				<span class="close">&times;</span>
-				<div id="modalView">
-					<!-- Contenu de la modale sera ajouté ici -->
-					<h2>Ajouter photo</h2>
-					<form id="addWorkForm">
-						<div class="formGroup">
-							<label for="title">Titre</label>
-							<input type="text" id="title" name="title" required>
-						</div>
-						<div class="formGroup">
-							<label for="imageUrl">URL de l'image</label>
-							<input type="text" id="imageUrl" name="imageUrl" required>
-						</div>
-						<div class="formGroup">
-							<label for="categoryId">Catégorie</label>
-							<select id="categoryId" name="categoryId" required>
-								<!-- Options de catégorie seront ajoutées ici -->
-							</select>
-						</div>
-						<button type="submit">Ajouter</button>
-					</form>
-				</div>
+
+			<!---- Visuel Ajout Photo-->
+			<div id="addPhotoForm" style="display:none;">
+				<button id="backToGallery"><i class="fa-solid fa-arrow-left"></i></button>
+				<h2>Ajout photo</h2>
+				<form id="uploadForm">
+
+					<input type="file" id="photoUpload" accept="image/*" required>
+					<input type="text" id="photoTitle" placeholder="Titre" required>
+
+					<select id="photoCategory" required>
+
+					</select>
+
+					<hr>
+					<button type="submit">valider</button>
+				</form>
 			</div>
 		</div>
 	</div>
+
 	<footer>
 		<nav>
 			<ul>

@@ -103,8 +103,9 @@ getCategories().then(async categories => {
   await getData();
 });
 
+/* MODALE */
 //ouverture de la modale au click sur le bouton "Modifier"
-const galleryModal= document.getElementById("galleryModal")
+const galleryModal = document.getElementById("galleryModal")
 const close = document.querySelector(".close")
 
 
@@ -114,7 +115,7 @@ edit.addEventListener("click", () => {
 async function openGalleryModal() {
   galleryModal.style.display = "block";
   const photos = await getData();
-  displayPhotosInModal(photos);
+  fetchAndDisplayPhotos()
 }
 const editBtn = document.querySelector(".editBtn");
 editBtn.addEventListener("click", openGalleryModal);
@@ -125,62 +126,79 @@ close.addEventListener("click", () => {
 
 window.addEventListener("click", (event) => {
   if (event.target === galleryModal) {
-    galleryModal.style.display="none";
+    galleryModal.style.display = "none";
   }
 });
 
-//Afficher les travaux photos dans la modal gallery photos
 
-function displayPhotosInModal(photos) {
-  const photosList = document.getElementById('photosList');
-  photosList.innerHTML = ''; // Effacer les photos existantes
-  photos.forEach(photo => {
-    const photoElement = document.createElement('figure');
-    photoElement.innerHTML = `
-      <img src="${photo.imageUrl}" alt="${photo.title}">
-      <figcaption>${photo.title}</figcaption>
-      <button class="delete-btn" data-id="${photo.id}">🗑️</button>
-    `;
-    photosList.appendChild(photoElement);
-  });
+//afficher la modale "ajout photo"
+const addPhotoBtn = document.getElementById("addPhotoBtn");
+const addPhotoForm = document.getElementById("addPhotoForm");
+const workDisplay = document.getElementById("workDisplay");
 
-  // Ajouter des écouteurs d'événements pour les boutons de suppression
-  document.querySelectorAll('.delete-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      const photoId = e.target.getAttribute('data-id');
-      // Ajoutez ici la logique pour supprimer la photo
-      console.log(`Supprimer la photo avec l'ID : ${photoId}`);
-    });
-  });
+addPhotoBtn.addEventListener("click", appearAddPhotoForm); 
+
+async function appearAddPhotoForm() {
+  workDisplay.style.display = "none";
+  addPhotoForm.style.display = "block";
+  
 }
+
+
+// Ajouter des écouteurs d'événements pour les boutons de suppression
+async function deleteWork(workId, element) {
+
+  const response = await fetch("http://localhost:5678/api/works/" + workId, {
+    method: "DELETE",
+    headers:{
+      Authorization:"Bearer " + localStorage.getItem('token')
+    }
+  });
+element.remove()
+
+}
+
 
 // Fonction pour récupérer et afficher les photos
 async function fetchAndDisplayPhotos() {
   try {
-    const response = await fetch('URL_DE_VOTRE_API/works');
+    const response = await fetch('http://localhost:5678/api/works');
     const photos = await response.json();
-    
+
     photosList.innerHTML = '';
-    photos.forEach(photo => {
+    photos.forEach(async(photo) => {
       const photoElement = document.createElement('figure');
-      photoElement.innerHTML = `
-        <img src="${photo.imageUrl}" alt="${photo.title}">
-        <figcaption>${photo.title}</figcaption>
-      `;
+      const image = document.createElement('img');
+      image.src = photo.imageUrl
+      image.alt = photo.title
+      photoElement.appendChild(image)
+      const trashIcon = document.createElement('i');
+      trashIcon.classList.add("fa-regular", "fa-trash-can", "trashIcon");
+      photoElement.appendChild(trashIcon)
+      
+
       photosList.appendChild(photoElement);
+      trashIcon.addEventListener('click', async () => {
+        await deleteWork(photo.id,photoElement)
+      })
     });
   } catch (error) {
     console.error('Erreur lors de la récupération des photos:', error);
   }
 }
 
-//modal
+//modal close
 document.querySelectorAll('.close').forEach(closeButton => {
   closeButton.addEventListener('click', function () {
     let loginItem = document.getElementById('loginItem');
-    let addWorkModal = document.getElementById('addWorkModal');
+    let galleryModal = document.getElementById('galleryModal');
     loginItem.style.display = 'none';
-    addWorkModal.style.display = 'none';
+    galleryModal.style.display = 'none';
+
+
+    // Réinitialiser l'affichage des sections internes de la modale
+    document.getElementById('workDisplay').style.display = 'block';
+    document.getElementById('addPhotoForm').style.display = 'none';
   });
 });
 
@@ -201,7 +219,7 @@ let editionMode = false
 // login logout 
 document.addEventListener('DOMContentLoaded', function () {
   init();
-  
+
 });
 function init() {
   if (localStorage.getItem("token")) {
