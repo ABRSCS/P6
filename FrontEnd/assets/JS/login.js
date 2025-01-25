@@ -1,35 +1,39 @@
-//Login JS Page
-document.getElementById('loginForm').addEventListener('submit', async function (event) {
-    event.preventDefault();
-    const url = 'http://localhost:5678/api'; //  l'URL de votre API
-    const loginUrl = `${url}/users/login`; // URL pour la connexion
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+// Login JS Page
+document.addEventListener('DOMContentLoaded', () => {
+    const loginForm = document.getElementById('loginForm');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
     const errorMessage = document.getElementById('errorMessage');
 
+    loginForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const url = 'http://localhost:5678/api';
+        const loginUrl = `${url}/users/login`;
 
-    try {
-        const response = await fetch(loginUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ email, password })
-        });
+        try {
+            const response = await fetch(loginUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                    email: emailInput.value, 
+                    password: passwordInput.value 
+                })
+            });
 
-        if (!response.ok) {
-            throw new Error(`Erreur HTTP : ${response.status}`);
+            if (!response.ok) {
+                throw new Error(`Erreur HTTP : ${response.status}`);
+            }
+
+            const { token } = await response.json();
+            localStorage.setItem('token', token);
+
+            // Redirection vers la page d'accueil
+            window.location.href = 'index.html';
+        } catch (error) {
+            console.error('Erreur de connexion:', error);
+            errorMessage.textContent = 'Erreur dans l\'email ou le mot de passe';
         }
-
-        const responseData = await response.json();
-        token = responseData.token; // Stocker le token d'authentification
-        localStorage.setItem('token', token); // Stocker le token dans le localStorage
-
-
-        // Redirection vers la page d'accueil
-        window.location.href = 'index.html';
-    } catch (error) {
-        errorMessage.textContent = 'Erreur dans l\'email ou le mot de passe';
-    }
+    });
 });
-

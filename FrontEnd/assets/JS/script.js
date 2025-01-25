@@ -1,252 +1,297 @@
-//Script JS Page
-const url = 'http://localhost:5678/api'; //  l'URL de votre API
-const loginUrl = `${url}/login`; // URL pour la connexion
-const categoriesUrl = 'http://localhost:5678/api/categories'; //  l'URL des catégories
+// Configuration
+const API = {
+  BASE_URL: 'http://localhost:5678/api',
+  ENDPOINTS: {
+    WORKS: '/works',
+    CATEGORIES: '/categories',
+    LOGIN: '/users/login'
+  },
+  getFullUrl: function(endpoint) {
+    return `${this.BASE_URL}${endpoint}`;
+  }
+};
 
-let data; // Variable pour stocker les données des travaux
-let token; // Variable pour stocker le token d'authentification
-let categories; // Variable pour stocker les catégories
+// Variables globales
+let data = []; // Données des travaux
+let categories = []; // Catégories
 
-
-
-async function getData() {
-  try {
-    const response = await fetch(url + "/works", {
-      headers: {
-        'Authorization': `Bearer ${token}`
+// Classe APIService
+class APIService {
+  static async getData(endpoint, token = null) {
+    const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+    try {
+      const response = await fetch(API.getFullUrl(endpoint), { headers });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-    });
-    if (!response.ok) {
-      throw new Error(`Erreur HTTP : ${response.status}`);
+      return await response.json();
+    } catch (error) {
+      console.error(`Problème avec Fetch : ${error.message}`);
+      throw error;
     }
-    data = await response.json();
-    console.log(data);
-    displayWorks(data);
-  } catch (error) {
-    console.error(`Problème avec Fetch : ${error.message}`);
+  }
+
+  static async postData(endpoint, data, token) {
+    try {
+      const response = await fetch(API.getFullUrl(endpoint), {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error(`Problème avec Fetch : ${error.message}`);
+      throw error;
+    }
+  }
+
+  static async deleteData(endpoint, token) {
+    try {
+      const response = await fetch(API.getFullUrl(endpoint), {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error(`Problème avec Fetch : ${error.message}`);
+      throw error;
+    }
   }
 }
 
-function displayWorks(works) {
-  const travauxList = document.getElementById('travauxList');
-  travauxList.innerHTML = ''; // Effacer les travaux existants
-  works.forEach(travail => {
-    if (travail.category && travail.category.name) { // Vérification pour éviter les erreurs
-      const travailItem = document.createElement('figure');
-      const img = document.createElement('img');
-      img.src = travail.imageUrl;
-      img.alt = travail.title;
-      const figcaption = document.createElement('figcaption');
-      figcaption.textContent = travail.title;
-      travailItem.appendChild(img);
-      travailItem.appendChild(figcaption);
-      travauxList.appendChild(travailItem);
-    }
+// Classe WorksDisplay
+class WorksDisplay {
+  static displayWorks(works) {
+    const travauxList = document.getElementById('travauxList');
+    travauxList.innerHTML = '';
+    works.forEach(travail => {
+      if (travail.category && travail.category.name) {
+        const travailItem = document.createElement('figure');
+        travailItem.dataset.category = travail.category.name;
+        const img = document.createElement('img');
+        img.src = travail.imageUrl;
+        img.alt = travail.title;
+        const figcaption = document.createElement('figcaption');
+        figcaption.textContent = travail.title;
+        travailItem.appendChild(img);
+        travailItem.appendChild(figcaption);
+        travauxList.appendChild(travailItem);
+      }
+    });
+  }
+
+  static generateCategoryMenu(categories) {
+    const categoryFilter = document.getElementById('categoryFilter');
+    categoryFilter.innerHTML = '<button class="categoryButton active" data-category="all">Tous</button>';
+    categories.forEach(category => {
+      categoryFilter.innerHTML += `<button class="categoryButton" data-category="${category.name}">${category.name}</button>`;
+    });
+    this.addCategoryListeners();
+  }
+
+  static addCategoryListeners() {
+    document.querySelectorAll('.categoryButton').forEach(button => {
+      button.addEventListener('click', () => {
+        const selectedCategory = button.getAttribute('data-category');
+        document.querySelectorAll('.categoryButton').forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+
+        if (selectedCategory === 'all') {
+          this.displayWorks(data);
+        } else {
+          const filteredWorks = data.filter(travail => travail.category && travail.category.name === selectedCategory);
+          this.displayWorks(filteredWorks);
+        }
+      });
+    });
+  }
+}
+
+// Fonctions principales
+async function init() {
+  try {
+    categories = await APIService.getData(API.ENDPOINTS.CATEGORIES);
+    WorksDisplay.generateCategoryMenu(categories);
+    data = await APIService.getData(API.ENDPOINTS.WORKS);
+    WorksDisplay.displayWorks(data);
+    setupModalListeners();
+    checkAuthStatus();
+  } catch (error) {
+    console.error("Erreur lors de l'initialisation :", error);
+  }
+}
+
+function loadImagesInModal() {
+  const photosList = document.getElementById('photosList');
+  photosList.innerHTML = '';
+  travauxList.innerHTML = '';
+  
+  data.forEach(work => {
+    const figure = document.createElement('figure');
+    const img = document.createElement('img');
+    img.src = work.imageUrl;
+    img.alt = work.title;
+    
+    const trashIcon = document.createElement('i');
+    trashIcon.className = 'fas fa-trash-alt trashIcon';
+    trashIcon.addEventListener('click', () => deleteWork(work.id));
+    
+    figure.appendChild(img);
+    figure.appendChild(trashIcon);
+    photosList.appendChild(figure);
   });
 }
 
-async function getCategories() {
-  try {
-    const response = await fetch(categoriesUrl);
-    if (!response.ok) {
-      throw new Error(`Erreur HTTP : ${response.status}`);
-    }
-    categories = await response.json();
-    return categories;
-  } catch (error) {
-    console.error(`Problème avec Fetch : ${error.message}`);
-  }
-}
+function setupModalListeners() {
+  // Variables pour la modale visuel 1 galerie photos
+  const editBtn = document.querySelector(".editBtn");
+  const galleryModal = document.getElementById("galleryModal");
+  const closeBtn = document.querySelector(".close");
+  const addPhotoBtn = document.getElementById("addPhotoBtn");
+  const addPhotoForm = document.getElementById("addPhotoForm");
+  const workDisplay = document.getElementById("workDisplay");
 
-async function generateCategoryMenu(categories) {
-  const categoryFilter = document.getElementById('categoryFilter');
-  categoryFilter.innerHTML = ''; // Effacer les boutons existants
-  const allButton = document.createElement('button');
-  allButton.textContent = 'Tous';
-  allButton.classList.add('categoryButton');
-  allButton.classList.add('active');
-  allButton.setAttribute('dataCategory', 'all');
-  categoryFilter.appendChild(allButton);
+  //Variables pour la modale visuel 2 et 3 ajout photo
+  const photoInput = document.getElementById('photoInput');
+  const uploadForm = document.getElementById('uploadForm');
+  const preview = document.getElementById('preview');
+  const projectImage = document.getElementById('projectImage');
+  const projectTitle = document.getElementById('projectTitle');
+  const projectCategory = document.getElementById('projectCategory');
+
+  editBtn.addEventListener("click", () => galleryModal.style.display = "block");
+  closeBtn.addEventListener("click", () => galleryModal.style.display = "none");
+  addPhotoBtn.addEventListener("click", () => {
+    workDisplay.style.display = "none";
+    addPhotoForm.style.display = "block";
+  });
+
+  editBtn.addEventListener("click", () => {
+    galleryModal.style.display = "block";
+    loadImagesInModal(); 
+  });
+
+  window.addEventListener("click", (event) => {
+    if (event.target === galleryModal) {
+      galleryModal.style.display = "none";
+    }
+  });
 
   categories.forEach(category => {
-    const button = document.createElement('button');
-    button.textContent = category.name;
-    button.classList.add('categoryButton');
-    button.setAttribute('dataCategory', category.name);
-    categoryFilter.appendChild(button);
+    const option = document.createElement('option');
+    option.value = category.id;
+    option.textContent = category.name;
+    projectCategory.appendChild(option);
   });
 
-  // Ajouter les événements de clic pour les boutons de catégorie
-  document.querySelectorAll('.categoryButton').forEach(button => {
-    button.addEventListener('click', () => {
-      const selectedCategory = button.getAttribute('dataCategory');
-      document.querySelectorAll('.categoryButton').forEach(btn => btn.classList.remove('active'));
-      button.classList.add('active');
-
-      if (selectedCategory === 'all') {
-        displayWorks(data);
-      } else {
-        const filteredWorks = data.filter(travail => travail.category && travail.category.name === selectedCategory);
-        if (filteredWorks.length === 0) {
-          console.log(`Aucun travail trouvé pour la catégorie ${selectedCategory}`);
-        } else {
-          displayWorks(filteredWorks);
-        }
-      }
-    });
-  });
-}
-
-// Appel initial pour récupérer les catégories et les données des travaux
-getCategories().then(async categories => {
-  await generateCategoryMenu(categories);
-  await getData();
-});
-
-/* MODALE */
-//ouverture de la modale au click sur le bouton "Modifier"
-const galleryModal = document.getElementById("galleryModal")
-const close = document.querySelector(".close")
-
-
-edit.addEventListener("click", () => {
-  galleryModal.style.display = "block";
-});
-async function openGalleryModal() {
-  galleryModal.style.display = "block";
-  const photos = await getData();
-  fetchAndDisplayPhotos()
-}
-const editBtn = document.querySelector(".editBtn");
-editBtn.addEventListener("click", openGalleryModal);
-// Fermeture de la modale au click sur la croix et sur l'overlay
-close.addEventListener("click", () => {
-  galleryModal.style.display = "none";
-});
-
-window.addEventListener("click", (event) => {
-  if (event.target === galleryModal) {
-    galleryModal.style.display = "none";
-  }
-});
-
-
-//afficher la modale "ajout photo"
-const addPhotoBtn = document.getElementById("addPhotoBtn");
-const addPhotoForm = document.getElementById("addPhotoForm");
-const workDisplay = document.getElementById("workDisplay");
-
-addPhotoBtn.addEventListener("click", appearAddPhotoForm); 
-
-async function appearAddPhotoForm() {
-  workDisplay.style.display = "none";
-  addPhotoForm.style.display = "block";
-  
-}
-
-
-// Ajouter des écouteurs d'événements pour les boutons de suppression
-async function deleteWork(workId, element) {
-
-  const response = await fetch("http://localhost:5678/api/works/" + workId, {
-    method: "DELETE",
-    headers:{
-      Authorization:"Bearer " + localStorage.getItem('token')
+  projectImage.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        preview.innerHTML = `<img src="${e.target.result}" alt="Preview" class="preview-image">`;
+      };
+      reader.readAsDataURL(file);
     }
   });
-element.remove()
 
-}
+  uploadForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append('image', projectImage.files[0]);
+    formData.append('title', projectTitle.value);
+    formData.append('category', projectCategory.value);
 
-
-// Fonction pour récupérer et afficher les photos
-async function fetchAndDisplayPhotos() {
-  try {
-    const response = await fetch('http://localhost:5678/api/works');
-    const photos = await response.json();
-
-    photosList.innerHTML = '';
-    photos.forEach(async(photo) => {
-      const photoElement = document.createElement('figure');
-      const image = document.createElement('img');
-      image.src = photo.imageUrl
-      image.alt = photo.title
-      photoElement.appendChild(image)
-      const trashIcon = document.createElement('i');
-      trashIcon.classList.add("fa-regular", "fa-trash-can", "trashIcon");
-      photoElement.appendChild(trashIcon)
-      
-
-      photosList.appendChild(photoElement);
-      trashIcon.addEventListener('click', async () => {
-        await deleteWork(photo.id,photoElement)
-      })
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(API.getFullUrl(API.ENDPOINTS.WORKS),
+{
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+      body: formData
     });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const newWork = await response.json();
+    data.push(newWork);
+    WorksDisplay.displayWorks(data);
+    loadImagesInModal();
+    galleryModal.style.display = "none";
+    } catch (error) {
+      console.error("Erreur lors de l'ajout du travail :", error);
+    }
+    });
+}
+
+async function deleteWork(workId) {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    console.error("Token non trouvé");
+    return;
+  }
+
+  try {
+    await APIService.deleteData(`${API.ENDPOINTS.WORKS}/${workId}`, token);
+    data = data.filter(work => work.id !== workId);
+    WorksDisplay.displayWorks(data);
+    loadImagesInModal();
   } catch (error) {
-    console.error('Erreur lors de la récupération des photos:', error);
+    console.error("Erreur lors de la suppression du travail :", error);
   }
 }
 
-//modal close
-document.querySelectorAll('.close').forEach(closeButton => {
-  closeButton.addEventListener('click', function () {
-    let loginItem = document.getElementById('loginItem');
-    let galleryModal = document.getElementById('galleryModal');
-    loginItem.style.display = 'none';
-    galleryModal.style.display = 'none';
 
+function checkAuthStatus() {
+  const token = localStorage.getItem("token");
+  const editionModeElement = document.getElementById("editionMode");
+  const categoryFilterElement = document.getElementById("categoryFilter");
+  const editBtnElement = document.querySelector(".editBtn");
 
-    // Réinitialiser l'affichage des sections internes de la modale
-    document.getElementById('workDisplay').style.display = 'block';
-    document.getElementById('addPhotoForm').style.display = 'none';
-  });
-});
-
-window.addEventListener('click', function (event) {
-  if (event.target == document.getElementById('loginModal') || event.target == document.getElementById('addWorkModal')) {
-    document.getElementById('loginModal').style.display = 'none';
-    document.getElementById('addWorkModal').style.display = 'none';
+  if (token) {
+    editionModeElement.innerHTML = "<p class='editionMode'>Mode édition</p>";
+    editionModeElement.style.display = "block";
+    categoryFilterElement.style.display = "none";
+    editBtnElement.style.display = "flex";
+    setupLogout();
+  } else {
+    editionModeElement.innerHTML = "";
+    editionModeElement.style.display = "none";
+    categoryFilterElement.style.display = "block";
+    editBtnElement.style.display = "none";
   }
-});
-
-/*-------------------------------------------------*/
-/****EDITION MODE****/
-let editionMode = false
-
-
-
-
-// login logout 
-document.addEventListener('DOMContentLoaded', function () {
-  init();
-
-});
-function init() {
-  if (localStorage.getItem("token")) {
-    editionMode = true;
-    let paramodif = document.createElement("p");
-    paramodif.textContent = "Mode édition";
-    paramodif.classList.add("editionMode");
-    document.getElementById("editionMode").appendChild(paramodif);
-    document.getElementById("categoryFilter").style.display = "none";
-    document.querySelector(".editBtn").style.display = "flex";
-  }
-
 }
 
-// Vérifier si l'utilisateur est en mode édition (par exemple, s'il est connecté)
-const isEditionMode = localStorage.getItem('token') !== null;
-
-if (isEditionMode) {
-  const loginModal = document.querySelector("#loginItem a");
+function setupLogout() {
+  const loginItem = document.querySelector("#loginItem a");
   if (loginItem) {
     loginItem.textContent = "Logout";
-    loginItem.href = "#"; // Optionnel : changer le lien
-    loginItem.addEventListener('click', function (e) {
+    loginItem.href = "#";
+    loginItem.addEventListener('click', (e) => {
       e.preventDefault();
-      // Logique de déconnexion
       localStorage.removeItem('token');
+      checkAuthStatus();
       window.location.reload();
     });
   }
-};
+}
+
+// Lancement de l'application
+document.addEventListener('DOMContentLoaded', () => {
+  init();
+  checkAuthStatus();
+});

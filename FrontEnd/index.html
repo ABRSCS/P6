@@ -77,20 +77,38 @@
 			<div id="addPhotoForm" style="display:none;">
 				<button id="backToGallery"><i class="fa-solid fa-arrow-left"></i></button>
 				<h2>Ajout photo</h2>
+				<div class="rectangle">
+					<i class=" fa-regular fa-image"></i>
+					<input type="file" id="photoInput" accept="image/*" style="display: none;">
+				</div>
+				<div id="preview"></div>
+
 				<form id="uploadForm">
 
-					<input type="file" id="photoUpload" accept="image/*" required>
-					<input type="text" id="photoTitle" placeholder="Titre" required>
-
-					<select id="photoCategory" required>
-
-					</select>
+					<div class="form-group">
+						<label for="projectImage">Image du projet :</label>
+						<input type="file" id="projectImage" name="image" accept="image/*" required>
+					  </div>
+					  
+					  <div class="form-group">
+						<label for="projectTitle">Titre du projet :</label>
+						<input type="text" id="projectTitle" name="title" required>
+					  </div>
+					  
+					  <div class="form-group">
+						<label for="projectCategory">Catégorie :</label>
+						<select id="projectCategory" name="category" required>
+						  <!-- Les options seront ajoutées dynamiquement en JavaScript -->
+						</select>
+					  </div>
+					
 
 					<hr>
 					<button type="submit">valider</button>
 				</form>
 			</div>
 		</div>
+	</div>
 	</div>
 
 	<footer>
