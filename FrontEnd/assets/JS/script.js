@@ -72,6 +72,7 @@ class APIService {
 // Classe WorksDisplay
 class WorksDisplay {
   static displayWorks(works) {
+    
     const travauxList = document.getElementById('travauxList');
     travauxList.innerHTML = '';
     works.forEach(travail => {
@@ -134,8 +135,7 @@ async function init() {
 function loadImagesInModal() {
   const photosList = document.getElementById('photosList');
   photosList.innerHTML = '';
-  travauxList.innerHTML = '';
-  
+
   data.forEach(work => {
     const figure = document.createElement('figure');
     const img = document.createElement('img');
@@ -157,6 +157,7 @@ function setupModalListeners() {
   const editBtn = document.querySelector(".editBtn");
   const galleryModal = document.getElementById("galleryModal");
   const closeBtn = document.querySelector(".close");
+  const backToGallery = document.getElementById("backToGallery")
   const addPhotoBtn = document.getElementById("addPhotoBtn");
   const addPhotoForm = document.getElementById("addPhotoForm");
   const workDisplay = document.getElementById("workDisplay");
@@ -171,6 +172,7 @@ function setupModalListeners() {
 
   editBtn.addEventListener("click", () => galleryModal.style.display = "block");
   closeBtn.addEventListener("click", () => galleryModal.style.display = "none");
+  backToGallery.addEventListener("click", () => galleryModal.style.display = "none");
   addPhotoBtn.addEventListener("click", () => {
     workDisplay.style.display = "none";
     addPhotoForm.style.display = "block";
@@ -214,7 +216,7 @@ function setupModalListeners() {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(API.getFullUrl(API.ENDPOINTS.WORKS),
+      const response =  await fetch(API.getFullUrl(API.ENDPOINTS.WORKS),
 {
       method: 'POST',
       headers: {
@@ -228,7 +230,9 @@ function setupModalListeners() {
     }
 
     const newWork = await response.json();
-    data.push(newWork);
+    data = await APIService.getData(API.ENDPOINTS.WORKS);
+    
+    
     WorksDisplay.displayWorks(data);
     loadImagesInModal();
     galleryModal.style.display = "none";
@@ -247,6 +251,7 @@ async function deleteWork(workId) {
 
   try {
     await APIService.deleteData(`${API.ENDPOINTS.WORKS}/${workId}`, token);
+    console.log(data);
     data = data.filter(work => work.id !== workId);
     WorksDisplay.displayWorks(data);
     loadImagesInModal();
@@ -265,13 +270,13 @@ function checkAuthStatus() {
   if (token) {
     editionModeElement.innerHTML = "<p class='editionMode'>Mode édition</p>";
     editionModeElement.style.display = "block";
-    categoryFilterElement.style.display = "none";
+    categoryFilterElement.classList.add("hidden");
     editBtnElement.style.display = "flex";
     setupLogout();
   } else {
     editionModeElement.innerHTML = "";
     editionModeElement.style.display = "none";
-    categoryFilterElement.style.display = "block";
+    categoryFilterElement.classList.remove("hidden");
     editBtnElement.style.display = "none";
   }
 }
@@ -289,6 +294,61 @@ function setupLogout() {
     });
   }
 }
+
+function createContactForm() {
+  const contactSection = document.createElement('section');
+  contactSection.id = 'contact';
+
+  const title = document.createElement('h2');
+  title.textContent = 'Contact';
+
+  const subtitle = document.createElement('p');
+  subtitle.textContent = 'Vous avez un projet ? Discutons-en !';
+
+  const form = document.createElement('form');
+  form.action = '#';
+  form.method = 'post';
+
+  const fields = [
+    { type: 'text', name: 'name', label: 'Nom' },
+    { type: 'email', name: 'email', label: 'Email' },
+    { type: 'textarea', name: 'message', label: 'Message' }
+  ];
+
+  fields.forEach(field => {
+    const formGroup = document.createElement('div');
+    formGroup.className = 'formGroup';
+
+    const label = document.createElement('label');
+    label.htmlFor = field.name;
+    label.textContent = field.label;
+
+    const input = field.type === 'textarea' ? document.createElement('textarea') : document.createElement('input');
+    input.type = field.type;
+    input.name = field.name;
+    input.id = field.name;
+    input.required = true;
+
+    formGroup.appendChild(label);
+    formGroup.appendChild(input);
+    form.appendChild(formGroup);
+  });
+
+  const submitButton = document.createElement('input');
+  submitButton.type = 'submit';
+  submitButton.value = 'Envoyer';
+
+  form.appendChild(submitButton);
+  contactSection.appendChild(title);
+  contactSection.appendChild(subtitle);
+  contactSection.appendChild(form);
+
+  return contactSection;
+}
+
+// Ajoutez cette ligne dans la fonction init() ou là où vous initialisez votre page
+document.querySelector('main').appendChild(createContactForm());
+
 
 // Lancement de l'application
 document.addEventListener('DOMContentLoaded', () => {
