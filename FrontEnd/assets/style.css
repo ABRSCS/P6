@@ -3,6 +3,8 @@
    License: none (public domain)
 */
 
+/* CSS Reset */
+
 html,
 body,
 div,
@@ -111,6 +113,8 @@ body {
 	line-height: 1;
 }
 
+
+
 ol,
 ul {
 	list-style: none;
@@ -185,7 +189,6 @@ h1>span {
 	left: 0;
 	right: 0;
 	z-index: 1000;
-
 }
 
 .myproject {
@@ -288,7 +291,7 @@ li:hover {
 }
 
 
-/* Style boutons catégories*/
+/* Categories buttons style */
 #categoryFilter {
 	display: flex;
 	justify-content: center;
@@ -331,7 +334,7 @@ li:hover {
 }
 
 
-/* Styles pour la fenêtre modale */
+/* Modal styles */
 .active {
 	display: flex;
 }
@@ -434,7 +437,7 @@ li:hover {
 
 }
 
-/*Styles pour la modale Ajout Photo*/
+/* "Ajout Photo" modal styles */
 
 /*Go back Arrow*/
 #backToGallery {
@@ -459,28 +462,62 @@ li:hover {
 	object-fit: cover;
 }
 
-
-/* Styles pour le formulaire de connexion */
-#login {
-	width: 50%;
-	margin: 0 auto;
-	padding: 2em 0;
-
+#addWorkButton {
+	display: none;
 }
 
-#login h2 {
+/* Connexion Form Styles */
+
+button[type="submit"] {
+	width: 179px;
+	height: 40px;
+	background-color: #1D6154;
+	color: #ffffff;
+	font-size: 14px;
+	border: none;
+	border-radius: 25px;
+	cursor: pointer;
+	margin-top: 10px;
+	margin-bottom: 20px;
+}
+
+button[type="submit"]:hover {
+	background-color: #0E2F28;
+	/* darkest color while the hover */
+}
+
+#errorMessage {
+	color: #ff0000;
+	/* Red color for the error message */
 	text-align: center;
-	margin-bottom: 1em;
+	margin-top: 1em;
 }
 
-#loginForm {
-	display: flex;
-	flex-direction: column;
+
+.forgotPassword {
+	color: #3D3D3D;
+	font-size: 0.875em;
+
+}
+
+.forgotPassword:hover {
+	color: #B1663C;
 }
 
 .formGroup {
-	margin-bottom: 1em;
+	margin-bottom: 25px;
 }
+
+.formGroup input {
+	width: 379px;
+	height: 51px;
+	padding: 0.5em;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+	border-radius: 5px;
+	box-sizing: border-box;
+}
+
 
 .formGroup label {
 	display: block;
@@ -488,47 +525,44 @@ li:hover {
 	text-align: left;
 }
 
-.formGroup input {
-	width: 100%;
-	padding: 0.5em;
-	border: none;
-	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
-	border-radius: 5px;
+#login {
+	margin: 0 auto;
+	padding: 2em 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 
-button[type="submit"] {
-	width: 100%;
-	height: 40px;
-	background-color: #1D6154;
-	/* Couleur verte */
-	color: #ffffff;
-	font-size: 14px;
-	border: none;
-	border-radius: 25px;
-	cursor: pointer;
-}
-
-button[type="submit"]:hover {
-	background-color: #2e865f;
-	/* Couleur verte plus foncée au survol */
-}
-
-#errorMessage {
-	color: #ff0000;
-	/* Couleur rouge pour le message d'erreur */
-	text-align: center;
-	margin-top: 1em;
-}
-
-#addWorkButton {
-	display: none;
+#loginItem a {
+	font-weight: bold;
+	color: black;
+	text-decoration: none;
 }
 
 
-/*Contact*/
+
+#loginForm {
+	display: flex;
+	flex-direction: column;
+	width: 379px;
+	margin-top: 35px;
+	align-items: center;
+	width: 379px;
+}
+
+#login h2 {
+	margin-bottom: 1em;
+}
+
+
+
+
+/****** Contact ******/
 #contact {
-	width: 50%;
+	width: 33%;
 	margin: auto;
+	margin-top: 50px;
 }
 
 #contact>* {
@@ -542,13 +576,11 @@ button[type="submit"]:hover {
 
 #contact p {
 	font-family: Work Sans;
-	font-size: 1em;
-	
+	font-weight: 400;
 }
 
 #contactForm {
 	text-align: left;
-	margin-top: 30px;
 	display: flex;
 	flex-direction: column;
 }
@@ -560,6 +592,7 @@ button[type="submit"]:hover {
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
+
 #contactLabel {
 	margin: 2em 0 1em 0;
 }
@@ -567,8 +600,11 @@ button[type="submit"]:hover {
 #contactTextarea {
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
-	
+	width: 100%;
+
+
 }
+
 
 input[type="submit"] {
 	font-family: 'Syne';
@@ -577,15 +613,37 @@ input[type="submit"] {
 	background-color: #1D6154;
 	margin: 2em auto;
 	width: 180px;
+	height: 36px;
 	text-align: center;
 	border-radius: 60px;
 }
 
+#message {
+	width: 100%;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+
 
 /* Footer */
-footer nav ul {
+footer {
+	height: 60px;
 	display: flex;
+	align-items: center;
+	/* Centre verticalement le contenu */
 	justify-content: flex-end;
-	margin: 2em;
 	background-color: white;
+	margin-top: 300px;
+
+
+}
+
+footer nav ul {
+	margin: 2em;
+	font-weight: 300;
+	margin-top: 25px;
+}
+
+footer li {
+	font-size: 0.875em;
 }
