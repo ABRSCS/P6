@@ -5,6 +5,7 @@ function checkAuthStatus() {
     const editionModeElement = document.getElementById("editionMode");
     const categoryFilterElement = document.getElementById("categoryFilter");
     const editBtnElement = document.querySelector(".editBtn");
+    
 
     if (token) {
         editionModeElement.innerHTML = "<p class='editionMode'>Mode édition</p>";
@@ -18,6 +19,7 @@ function checkAuthStatus() {
         categoryFilterElement.classList.remove("hidden");
         editBtnElement.style.display = "none";
     }
+    
 }
 
 function setupLogout() {
@@ -33,5 +35,12 @@ function setupLogout() {
         });
     }
 }
+
+
+// Appelle highlightLoginLink lors du chargement initial et à chaque vérification d'authentification
+document.addEventListener("DOMContentLoaded", () => {
+    highlightLoginLink();
+    checkAuthStatus();
+});
 
 export {checkAuthStatus, setupLogout};

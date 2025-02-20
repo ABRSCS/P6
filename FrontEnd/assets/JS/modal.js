@@ -1,8 +1,6 @@
-//MODAL
 import { API, APIService, getCategories } from './api.js';
 import { WorksDisplay } from './works.js';
 import { deleteWork } from './app.js';
-
 
 function loadImagesInModal(data) {
     const photosList = document.getElementById('photosList');
@@ -35,13 +33,16 @@ async function setupModalListeners(data) {
     const workDisplay = document.getElementById("workDisplay");
 
     //Variables pour la modale visuel 2 et 3 ajout photo
-
     const photoInput = document.getElementById('photoInput');
     const uploadForm = document.getElementById('uploadForm');
-    const preview = document.getElementById('preview');
-    const projectImage = document.getElementById('projectImage');
     const projectTitle = document.getElementById('projectTitle');
     const projectCategory = document.getElementById('projectCategory');
+    const submitButton = document.getElementById('submitButton');
+    const rectangle = document.querySelector('.rectangle');
+    const icon = document.querySelector('.rectangle i');
+    const label = document.querySelector('.rectangle label');
+    const paragraph = document.querySelector('.rectangle p');
+    const preview = document.getElementById('preview');
 
     // Gestion des événements pour ouvrir/fermer la modale
     editBtn.addEventListener("click", () => galleryModal.style.display = "block");
@@ -67,10 +68,57 @@ async function setupModalListeners(data) {
         }
     });
 
+    // Fonction pour vérifier la validité du formulaire
+    function checkFormValidity() {
+        const isPhotoUploaded = rectangle.querySelector('img') !== null; // Vérifie si une image est présente
+        const isTitleFilled = projectTitle.value.trim() !== '';
+        const isCategorySelected = projectCategory.value !== '';
+
+        if (isPhotoUploaded && isTitleFilled && isCategorySelected) {
+            submitButton.removeAttribute('disabled'); // Active le bouton
+            submitButton.style.backgroundColor = '#1D6154'; // Vert
+            submitButton.style.cursor = 'pointer';
+        } else {
+            submitButton.setAttribute('disabled', 'true'); // Désactive le bouton
+            submitButton.style.backgroundColor = '#cccccc'; // Gris
+            submitButton.style.cursor = 'not-allowed';
+        }
+    }
+    // Gestion de la prévisualisation de l'image et validation du formulaire
+    photoInput.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Cacher l'icone, le label et le paragraphe
+                icon.style.display = 'none';
+                label.style.display = 'none';
+                paragraph.style.display = 'none';
+
+                // Afficher la prévisualisation
+                rectangle.innerHTML = `<img src="${e.target.result}" style="height: 100%; object-fit: cover;">`;
+                checkFormValidity();
+            }
+            reader.readAsDataURL(file);
+        } else {
+            // Si aucun fichier n'est sélectionné, réinitialiser l'affichage
+            icon.style.display = 'block';
+            label.style.display = 'block';
+            paragraph.style.display = 'block';
+            rectangle.innerHTML = `<i class="fa-regular fa-image"></i>
+                                   <label for="photoInput">+ Ajouter photo</label>
+                                   <input type="file" id="photoInput" accept="image/*" style="display: none;">
+                                   <p>jpg, png : 4mo max</p>`;
+            checkFormValidity();
+        }
+    });
+    // Gestion des événements pour vérifier la validité du formulaire
+
+    projectTitle.addEventListener('input', checkFormValidity);
+    projectCategory.addEventListener('change', checkFormValidity);
     // Récupérer les catégories depuis l'API
     try {
         const categories = await APIService.getData(API.ENDPOINTS.CATEGORIES);
-
         // Ajouter les options au menu déroulant
         projectCategory.innerHTML = ''; // Vider les options existantes
         categories.forEach(category => {
@@ -87,24 +135,13 @@ async function setupModalListeners(data) {
         defaultOption.selected = true;
         projectCategory.appendChild(defaultOption);
     }
-
-    // Prévisualisation de l'image sélectionnée
-    projectImage.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                preview.innerHTML = `<img src="${e.target.result}" alt="Preview" class="preview-image">`;
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-
+    // Validation initiale du formulaire pour configurer l'état initial du bouton
+    checkFormValidity();
     // Gestion du formulaire d'ajout de photo
     uploadForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const formData = new FormData();
-        formData.append('image', projectImage.files[0]);
+        formData.append('image', photoInput.files[0]);
         formData.append('title', projectTitle.value);
         formData.append('category', projectCategory.value);
 
@@ -116,14 +153,13 @@ async function setupModalListeners(data) {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(API.getFullUrl(API.ENDPOINTS.WORKS),
-                {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: formData
-                });
+            const response = await fetch(API.getFullUrl(API.ENDPOINTS.WORKS), {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                body: formData
+            });
 
             if (!response.ok) {
                 const errorDetails = await response.json();
@@ -140,8 +176,12 @@ async function setupModalListeners(data) {
 
             // Réinitialiser le formulaire et fermer la modale
             uploadForm.reset();
-            preview.innerHTML = '';
+            rectangle.innerHTML = `<i class="fa-regular fa-image"></i>
+                                   <label for="photoInput">+ Ajouter photo</label>
+                                   <input type="file" id="photoInput" accept="image/*" style="display: none;">
+                                   <p>jpg, png : 4mo max</p>`;
             galleryModal.style.display = "none";
+            checkFormValidity()
         } catch (error) {
             console.error("Erreur lors de l'ajout du travail :", error);
         }

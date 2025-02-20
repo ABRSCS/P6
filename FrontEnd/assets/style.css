@@ -5,6 +5,10 @@
 
 /* CSS Reset */
 
+html {
+	scroll-behavior: smooth;
+}
+
 html,
 body,
 div,
@@ -92,6 +96,7 @@ video {
 	font-size: 100%;
 	font: inherit;
 	vertical-align: baseline;
+	text-decoration: none;
 }
 
 /* HTML5 display-role reset for older browsers */
@@ -111,13 +116,23 @@ section {
 
 body {
 	line-height: 1;
+	max-width: 1140px;
+	margin: auto;
+	font-family: 'Work Sans';
+	font-size: 14px;
+	background-color: #FFFEF8;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
 }
-
-
 
 ol,
 ul {
 	list-style: none;
+}
+
+a {
+	color: #3D3D3D;
 }
 
 blockquote,
@@ -139,19 +154,6 @@ table {
 }
 
 /** end reset css**/
-
-html {
-	background-color: #FFFEF8;
-	;
-}
-
-body {
-	max-width: 1140px;
-	margin: auto;
-	font-family: 'Work Sans';
-	font-size: 14px;
-	padding-top: 30px;
-}
 
 header {
 	display: flex;
@@ -178,6 +180,33 @@ h1>span {
 	letter-spacing: 0.1em;
 }
 
+h2 {
+	font-family: 'Syne';
+	font-weight: 700;
+	font-size: 30px;
+	color: #1D6154
+}
+
+nav ul {
+	display: flex;
+	align-items: center;
+	list-style-type: none;
+	padding: 0;
+	margin-right: -100px;
+}
+
+nav li {
+	margin-right: 40px;
+	font-size: 1.2em;
+	margin-left: 30px;
+}
+
+li:hover {
+	color: #B1663C;
+}
+
+
+/* Edition mode */
 #editionMode {
 	background-color: black;
 	text-align: center;
@@ -191,14 +220,6 @@ h1>span {
 	z-index: 1000;
 }
 
-.myproject {
-	display: flex !important;
-	justify-content: center;
-	align-items: center;
-	margin-bottom: 50px;
-}
-
-
 .editBtn {
 	display: none;
 	margin-left: 25px;
@@ -208,36 +229,15 @@ h1>span {
 	margin-left: 15px;
 }
 
-h2 {
-	font-family: 'Syne';
-	font-weight: 700;
-	font-size: 30px;
-	color: #1D6154
-}
 
-nav ul {
-	display: flex;
-	align-items: center;
-	list-style-type: none;
-
-}
-
-nav li {
-	padding: 0 10px;
-	font-size: 1.2em;
-}
-
-li:hover {
-	color: #B1663C;
-}
-
+/* Introduction Part */
 #introduction {
 	display: flex;
 	align-items: center;
 }
 
 #introduction figure {
-	flex: 1
+	flex: 1;
 }
 
 #introduction img {
@@ -247,7 +247,7 @@ li:hover {
 }
 
 #introduction article {
-	flex: 1
+	flex: 1;
 }
 
 #introduction h2 {
@@ -256,11 +256,23 @@ li:hover {
 
 #introduction p {
 	margin-bottom: 0.5em;
+	font-weight: 400;
+	line-height: 16px;
+	color: #3D3D3D;
+	width: 404px;
+	line-height: 16.42px;
 }
 
+/* Portfolio part */
 #portfolio h2 {
 	text-align: center;
+}
 
+#portfolio .myproject {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-bottom: 50px;
 }
 
 .gallery {
@@ -277,7 +289,6 @@ li:hover {
 	padding-bottom: 138%;
 	position: relative;
 	overflow: hidden;
-
 }
 
 .gallery img {
@@ -307,11 +318,9 @@ li:hover {
 
 .categoryButton {
 	background-color: #ffffff;
-	/* Fond blanc */
 	color: #1d6154;
-	/* Texte vert */
+	/* text color */
 	border: 2px solid #1d6154;
-	/* Bordure verte */
 	padding: 10px 20px;
 	font-size: 16px;
 	cursor: pointer;
@@ -321,20 +330,16 @@ li:hover {
 
 .categoryButton:hover {
 	background-color: #1d6154;
-	/* Fond vert au survol */
 	color: #ffffff;
-	/* Texte blanc au survol */
 }
 
 .categoryButton.active {
 	background-color: #1d6154;
-	/* Fond vert pour le bouton actif */
 	color: #ffffff;
-	/* Texte blanc pour le bouton actif */
 }
 
 
-/* Modal styles */
+/***** Modal styles ******/
 .active {
 	display: flex;
 }
@@ -364,13 +369,11 @@ li:hover {
 	background-color: #fefefe;
 	margin: 15% auto;
 	/* 15% from the top and centered */
-
 	border: 1px solid #888;
-	width: 30%;
-
-
+	width: 40%;
 	padding: 40px 70px 30px 70px;
-
+	position: relative;
+	border-radius: 10px;
 }
 
 .modalContent h2 {
@@ -386,22 +389,26 @@ li:hover {
 	border: none;
 	background-color: #B3B3B3;
 	height: 1px;
-	margin-top: 40px;
+	margin-top: 20px;
+	margin-bottom: 20px;
 }
 
-.modalContent button {
-	margin-top: 25px;
+.modalContent button[type="submit"] {
+	display: block;
+	margin: 25px auto 0;
+	width: 180px;
 }
 
 .close {
 	position: absolute;
-	top: 46%;
-	right: 31%;
+	top: 20px;
+	right: 20px;
 	height: 12px;
 	width: 12px;
 	font-weight: bold;
 }
 
+/* Gallery Photos Modal*/
 #photosList {
 	display: flex;
 	flex-wrap: wrap;
@@ -409,7 +416,7 @@ li:hover {
 }
 
 #photosList figure {
-	width: 76px;
+	width: calc(20% - 20px);
 	height: 102px;
 	position: relative;
 }
@@ -417,15 +424,13 @@ li:hover {
 #photosList figure img {
 	width: 100%;
 	height: 100%;
-	object-fit: contain;
-
+	object-fit: cover;
 }
 
 .trashIcon {
 	position: absolute;
 	top: 5px;
 	right: 5px;
-
 	width: 17px;
 	color: white;
 	background-color: black;
@@ -434,39 +439,166 @@ li:hover {
 	justify-content: center;
 	align-items: center;
 	font-weight: bold;
-
 }
 
-/* "Ajout Photo" modal styles */
+/***** "Ajout Photo" modal styles ******/
 
-/*Go back Arrow*/
+/* Go back Arrow*/
 #backToGallery {
 	background: none;
 	border: none;
 	position: absolute;
-	top: 40%;
-	left: 31%;
+	top: 20px;
+	left: 20px;
+	width: 21px;
 }
 
-/*preview modale*/
+/* Preview modal*/
+#addWorkButton {
+	display: none;
+}
+
 #preview {
-	display: flex;
-	flex-wrap: wrap;
 	gap: 10px;
 	margin-top: 20px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	z-index: 2;
+	display: none;
+	/* Div hidden by default*/
 }
 
-.preview-image {
+#preview img {
 	width: 100px;
 	height: 100px;
 	object-fit: cover;
 }
 
-#addWorkButton {
+#projectTitle {
+	height: 50px;
+	font-size: 1.2em;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+
+.rectangle {
+	width: 100%;
+	/* Largeur du rectangle */
+	height: 169px;
+	/* Hauteur du rectangle */
+	background-color: #E8F1F6;
+	/* Couleur de remplissage (optionnelle) */
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	position: relative;
+	overflow: hidden;
+	margin-bottom: 20px;
+}
+
+.rectangle i,
+.rectangle label,
+.rectangle p {
+	z-index: 1;
+}
+
+.rectangle i {
+	font-size: 58px;
+	color: #B9C5CC;
+	margin-bottom: 15px;
+}
+
+.rectangle input[type="file"] {
 	display: none;
 }
 
-/* Connexion Form Styles */
+.rectangle label {
+	background-color: #CBD6DC;
+	color: #306685;
+	padding: 10px 33px;
+	border-radius: 50px;
+	cursor: pointer;
+	font-weight: 500;
+	font-size: 14px;
+	margin-top: 10px;
+}
+
+.rectangle p {
+	font-size: 10px;
+	color: #444444;
+	margin-top: 7px;
+}
+
+/* Add Photo form */
+#uploadForm {
+	display: flex;
+	flex-direction: column;
+}
+
+#uploadForm button[type="submit"] {
+	width: 179px;
+	height: 40px;
+	background-color: #cccccc;
+	/* Gris */
+	color: #666666;
+	font-size: 14px;
+	border: none;
+	border-radius: 25px;
+	cursor: not-allowed;
+	/* le bouton est désactivé */
+	margin-top: 10px;
+	margin-bottom: 20px;
+}
+
+#uploadForm button[type="submit"]:enabled {
+	background-color: #1D6154;
+	/* Vert */
+	color: #ffffff;
+	cursor: pointer;
+	/* Change le curseur pour indiquer qu'il est cliquable */
+}
+
+#uploadForm button[type="submit"]:enabled:hover {
+	background-color: #0E2F28;
+}
+
+#uploadForm label {
+	color: #3D3D3D;
+	font-size: 0,875em;
+}
+
+.form-group {
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 25px;
+}
+
+.form-group label {
+	display: block;
+	margin-bottom: 0.5em;
+	text-align: left;
+}
+
+.form-group input,
+.form-group select {
+	width: 100%;
+	padding: 0.5em;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+	border-radius: 5px;
+	box-sizing: border-box;
+	background-color: white;
+	height: 51px;
+}
+
+
+
+/***** LOG IN Form Styles *****/
 
 button[type="submit"] {
 	width: 179px;
@@ -488,16 +620,13 @@ button[type="submit"]:hover {
 
 #errorMessage {
 	color: #ff0000;
-	/* Red color for the error message */
 	text-align: center;
 	margin-top: 1em;
 }
 
-
 .forgotPassword {
 	color: #3D3D3D;
 	font-size: 0.875em;
-
 }
 
 .forgotPassword:hover {
@@ -505,6 +634,8 @@ button[type="submit"]:hover {
 }
 
 .formGroup {
+	display: flex;
+	flex-direction: column;
 	margin-bottom: 25px;
 }
 
@@ -518,11 +649,14 @@ button[type="submit"]:hover {
 	box-sizing: border-box;
 }
 
-
 .formGroup label {
 	display: block;
 	margin-bottom: 0.5em;
 	text-align: left;
+}
+
+.active-login {
+    font-weight: bold;
 }
 
 #login {
@@ -535,12 +669,13 @@ button[type="submit"]:hover {
 }
 
 #loginItem a {
-	font-weight: bold;
 	color: black;
 	text-decoration: none;
 }
 
-
+#loginItem a:hover {
+	color: #B1663C;
+}
 
 #loginForm {
 	display: flex;
@@ -557,7 +692,6 @@ button[type="submit"]:hover {
 
 
 
-
 /****** Contact ******/
 #contact {
 	width: 33%;
@@ -567,7 +701,6 @@ button[type="submit"]:hover {
 
 #contact>* {
 	text-align: center;
-
 }
 
 #contact h2 {
@@ -592,7 +725,6 @@ button[type="submit"]:hover {
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
-
 #contactLabel {
 	margin: 2em 0 1em 0;
 }
@@ -600,9 +732,6 @@ button[type="submit"]:hover {
 #contactTextarea {
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
-	width: 100%;
-
-
 }
 
 
@@ -625,20 +754,20 @@ input[type="submit"] {
 }
 
 
-/* Footer */
+/***** Footer *****/
 footer {
 	height: 60px;
-	display: flex;
-	align-items: center;
-	/* Centre verticalement le contenu */
-	justify-content: flex-end;
 	background-color: white;
-	margin-top: 300px;
-
-
+	margin-top: 20px;
+	width: 1440px;
+	margin-left: -150px;
+	margin-right: -150px;
 }
 
 footer nav ul {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
 	margin: 2em;
 	font-weight: 300;
 	margin-top: 25px;
@@ -646,4 +775,5 @@ footer nav ul {
 
 footer li {
 	font-size: 0.875em;
+	padding-right: 25px;
 }

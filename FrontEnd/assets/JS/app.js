@@ -28,9 +28,9 @@ async function init() {
 
 async function deleteWork(workId) {
     const token = localStorage.getItem("token");
-    console.log("Token utilisé pour la suppression:", token); // Vérifie si le token est présent
+    console.log("Token utilisé pour la suppression:", token); // Check if the token is present 
 
-    // Vérification du token
+    // Token check
     if (!token) {
         console.error("Token non trouvé");
         return;
@@ -57,7 +57,7 @@ data = data.filter(work => work.id !== workId);
 WorksDisplay.displayWorks(data);
 loadImagesInModal(data);
 
-        if (response.ok) {
+        if (!response.ok) {
             if (response.status === 401) {
                 alert("Votre session a expiré. Veuillez vous reconnecter");
                 localStorage.removeItem("token"); // SUppression du token expiré
