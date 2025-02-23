@@ -8,8 +8,8 @@ function checkAuthStatus() {
     
 
     if (token) {
-        editionModeElement.innerHTML = "<p class='editionMode'>Mode édition</p>";
-        editionModeElement.style.display = "block";
+        editionModeElement.innerHTML = `<i class="fa-solid fa-pen-to-square"></i><p class='editionMode'>Mode édition</p>`;
+        editionModeElement.style.display = "flex";
         categoryFilterElement.classList.add("hidden");
         editBtnElement.style.display = "flex";
         setupLogout();

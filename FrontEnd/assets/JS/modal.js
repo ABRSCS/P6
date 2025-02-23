@@ -1,4 +1,4 @@
-import { API, APIService, getCategories } from './api.js';
+import { API, APIService } from './api.js';
 import { WorksDisplay } from './works.js';
 import { deleteWork } from './app.js';
 

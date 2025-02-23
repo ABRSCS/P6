@@ -37,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
             errorMessage.textContent = 'Erreur dans l\'email ou le mot de passe';
         }
     });
+    
     highlightLoginLink();
 });
 

@@ -114,11 +114,18 @@ section {
 	display: block;
 }
 
+:root {
+	--primary-color: #1D6154;
+	--secondary-color: #B1663C;
+	--font-family: 'Work Sans', sans-serif;
+	--font-family-title: 'Syne', sans-serif;
+}
+
 body {
 	line-height: 1;
 	max-width: 1140px;
 	margin: auto;
-	font-family: 'Work Sans';
+	font-family: var(--font-family);
 	font-size: 14px;
 	background-color: #FFFEF8;
 	height: 100vh;
@@ -153,7 +160,7 @@ table {
 	border-spacing: 0;
 }
 
-/** end reset css**/
+/** end reset css **/
 
 header {
 	display: flex;
@@ -168,23 +175,23 @@ section {
 h1 {
 	display: flex;
 	flex-direction: column;
-	font-family: 'Syne';
+	font-family: var(--font-family-title);
 	font-size: 22px;
 	font-weight: 800;
-	color: #B1663C
+	color: var(--secondary-color);
 }
 
 h1>span {
-	font-family: 'Work Sans';
+	font-family: var(--font-family);
 	font-size: 10px;
 	letter-spacing: 0.1em;
 }
 
 h2 {
-	font-family: 'Syne';
+	font-family: var(--font-family-title);
 	font-weight: 700;
 	font-size: 30px;
-	color: #1D6154
+	color: var(--primary-color);
 }
 
 nav ul {
@@ -196,13 +203,13 @@ nav ul {
 }
 
 nav li {
-	margin-right: 40px;
+	margin-right: 30px;
 	font-size: 1.2em;
 	margin-left: 30px;
 }
 
 li:hover {
-	color: #B1663C;
+	color: var(--secondary-color);
 }
 
 
@@ -218,8 +225,20 @@ li:hover {
 	left: 0;
 	right: 0;
 	z-index: 1000;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
 }
 
+#editionMode i {
+	font-size: 1.2em;
+	font-weight: 400;
+}
+
+#editionMode {
+	margin:0;
+}
 .editBtn {
 	display: none;
 	margin-left: 25px;
@@ -318,9 +337,9 @@ li:hover {
 
 .categoryButton {
 	background-color: #ffffff;
-	color: #1d6154;
+	color: var(--primary-color);
 	/* text color */
-	border: 2px solid #1d6154;
+	border: 2px solid var(--primary-color);
 	padding: 10px 20px;
 	font-size: 16px;
 	cursor: pointer;
@@ -329,12 +348,13 @@ li:hover {
 }
 
 .categoryButton:hover {
-	background-color: #1d6154;
+	background-color: var(--primary-color);
 	color: #ffffff;
+	transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .categoryButton.active {
-	background-color: #1d6154;
+	background-color: var(--primary-color);
 	color: #ffffff;
 }
 
@@ -377,7 +397,7 @@ li:hover {
 }
 
 .modalContent h2 {
-	font-family: work Sans;
+	font-family: var(--font-family);
 	font-weight: 400;
 	font-size: 26px;
 	color: black;
@@ -487,11 +507,8 @@ li:hover {
 
 .rectangle {
 	width: 100%;
-	/* Largeur du rectangle */
 	height: 169px;
-	/* Hauteur du rectangle */
 	background-color: #E8F1F6;
-	/* Couleur de remplissage (optionnelle) */
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -544,32 +561,30 @@ li:hover {
 	width: 179px;
 	height: 40px;
 	background-color: #cccccc;
-	/* Gris */
 	color: #666666;
 	font-size: 14px;
 	border: none;
 	border-radius: 25px;
 	cursor: not-allowed;
-	/* le bouton est désactivé */
+	/* the button is desabled */
 	margin-top: 10px;
 	margin-bottom: 20px;
 }
 
 #uploadForm button[type="submit"]:enabled {
-	background-color: #1D6154;
-	/* Vert */
+	background-color: var(--primary-color);
 	color: #ffffff;
 	cursor: pointer;
-	/* Change le curseur pour indiquer qu'il est cliquable */
 }
 
 #uploadForm button[type="submit"]:enabled:hover {
 	background-color: #0E2F28;
+	transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 #uploadForm label {
 	color: #3D3D3D;
-	font-size: 0,875em;
+	font-size: 0, 875em;
 }
 
 .form-group {
@@ -603,7 +618,7 @@ li:hover {
 button[type="submit"] {
 	width: 179px;
 	height: 40px;
-	background-color: #1D6154;
+	background-color: var(--primary-color);
 	color: #ffffff;
 	font-size: 14px;
 	border: none;
@@ -615,7 +630,7 @@ button[type="submit"] {
 
 button[type="submit"]:hover {
 	background-color: #0E2F28;
-	/* darkest color while the hover */
+	transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 #errorMessage {
@@ -627,10 +642,11 @@ button[type="submit"]:hover {
 .forgotPassword {
 	color: #3D3D3D;
 	font-size: 0.875em;
+	text-decoration: underline;
 }
 
 .forgotPassword:hover {
-	color: #B1663C;
+	color: var(--secondary-color);
 }
 
 .formGroup {
@@ -656,7 +672,7 @@ button[type="submit"]:hover {
 }
 
 .active-login {
-    font-weight: bold;
+	font-weight: bold;
 }
 
 #login {
@@ -674,7 +690,7 @@ button[type="submit"]:hover {
 }
 
 #loginItem a:hover {
-	color: #B1663C;
+	color: var(--secondary-color);
 }
 
 #loginForm {
@@ -708,7 +724,7 @@ button[type="submit"]:hover {
 }
 
 #contact p {
-	font-family: Work Sans;
+	font-family: var(--font-family);
 	font-weight: 400;
 }
 
@@ -716,6 +732,11 @@ button[type="submit"]:hover {
 	text-align: left;
 	display: flex;
 	flex-direction: column;
+}
+
+#contact .formGroup textarea {
+	height: 174px;
+	resize: vertical;
 }
 
 #contactInput {
@@ -736,10 +757,10 @@ button[type="submit"]:hover {
 
 
 input[type="submit"] {
-	font-family: 'Syne';
+	font-family: var(--font-family-title);
 	font-weight: 700;
 	color: white;
-	background-color: #1D6154;
+	background-color: var(--primary-color);
 	margin: 2em auto;
 	width: 180px;
 	height: 36px;
@@ -751,6 +772,7 @@ input[type="submit"] {
 	width: 100%;
 	border: none;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+	border-radius: 5px;
 }
 
 
@@ -758,7 +780,6 @@ input[type="submit"] {
 footer {
 	height: 60px;
 	background-color: white;
-	margin-top: 20px;
 	width: 1440px;
 	margin-left: -150px;
 	margin-right: -150px;
@@ -776,4 +797,14 @@ footer nav ul {
 footer li {
 	font-size: 0.875em;
 	padding-right: 25px;
+}
+
+/* Footer Home-page*/
+.home-page footer {
+	margin-top: 20px;
+}
+
+/* Footer Login-page */
+.login-page footer {
+	margin-top: 300px;
 }

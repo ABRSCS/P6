@@ -2,7 +2,7 @@
 import { API, APIService } from './api.js';
 import { WorksDisplay } from './works.js';
 import { loadImagesInModal, setupModalListeners } from './modal.js';
-import { checkAuthStatus, setupLogout } from './auth.js';
+import { checkAuthStatus } from './auth.js';
 import { createContactForm } from './contact.js';
 
 // Variables globales
@@ -64,9 +64,6 @@ loadImagesInModal(data);
                 window.location.href = "login.html"; // Redirection vers la page de connexion
             }
             throw new Error(`Erreur HTTP : ${response.status}`);
-        
-
-        
 
     } else {
         throw new Error(`Erreur HTTP inattendue : ${response.status}`);
@@ -86,8 +83,6 @@ document.addEventListener('DOMContentLoaded', () => {
     init();
     checkAuthStatus();
 });
-
-
 
 
 export { deleteWork };

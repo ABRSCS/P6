@@ -1,5 +1,5 @@
 //WORKS
-import { API } from './api.js';
+
 
 class WorksDisplay {
     static displayWorks(works) {

@@ -60,11 +60,11 @@ class APIService {
                 }
             });
             console.log("Réponse brute de deleteData:", response);
-            return response;
-            
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
+            return response;
+            
         } catch (error) {
             console.error(`Problème avec Fetch : ${error.message}`);
             throw error;
