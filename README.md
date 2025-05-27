@@ -52,6 +52,8 @@ npm install
 
 3. Lancer le backend
 
+Lire le ReadMe du dossier Backend pour avoir les codes d'accès à l'API.
+
 bash
 npm start
 
